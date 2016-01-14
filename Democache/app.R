@@ -1,13 +1,17 @@
 ####This app is for interactive map  of GSOD climate data#######
 ### using R and essentia########################################
 
+###set working directory, please change to where your##########
+###Democache fold is located##################################
 setwd('/home/essentia/ShinyApps/Democache/')
-##load library
+
+##load libraries, please use install.packages to download#####
+###################if your R session##########################
 library(shiny)
 library(leaflet)
 library(RESS)
 
-##readin info for weather stations
+##readin info for weather stations############################
 
 geo <- read.csv("geoUS.csv")
 latitude  <- geo$LAT
@@ -111,7 +115,7 @@ shinyApp(
    )        
   ),
   
-  server <- function(input, output, session){ #instructions
+  server <- function(input, output, session){
     map = createLeafletMap(session, 'map')
     session$onFlushed(once=T, function(){
       map$addCircleMarker(lat = latitude, lng = longitude, 
@@ -135,9 +139,9 @@ shinyApp(
     ##########create DB and tables######
     ##for the very first time of this app, execute createdb.sh and 
     ##comment out the "ess udbd restart", thereafter comment out
-    ##createdb.sh, and use "ess udbd restart"
-    # system("./createdb.sh")
-    system("ess udbd restart")
+    ##createdb.sh, and use "ess udbd restart" can save some time
+    system("./createdb.sh")
+    ##system("ess udbd restart")
     
    observe({
       input$retrieveButton
