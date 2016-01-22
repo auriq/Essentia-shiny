@@ -1,6 +1,6 @@
 #!/bin/sh
 
-####streaming data using aq_pp and udbd
+####streaming data using aq_pp and reserved udbd
 ##j.z. Dec 2015
 
 num=1
