@@ -11,7 +11,7 @@ library(shiny)
 library(leaflet)
 library(RESS)
 
-##readin info for weather stations############################
+##read info for weather stations############################
 
 geo <- read.csv("geoUS.csv")
 latitude  <- geo$LAT
