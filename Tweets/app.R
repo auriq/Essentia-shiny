@@ -1,4 +1,4 @@
-####This app is for interactive map  of GSOD climate data#######
+####This app is for interactive map  of Tweets##################
 ### using R and essentia########################################
 
 ###set working directory, please change to where your##########
@@ -11,14 +11,12 @@ library(shiny)
 library(leaflet)
 library(RESS)
 library(stringr)
-##read info for weather stations############################
 
 geo <- read.csv("tweets.csv")
 geo <- geo[geo$geo_lat != 0 & geo$geo_lon != 0,]
 latitude  <- geo$geo_lat
 longitude <- geo$geo_lon
 geo$id <- str_pad(geo$id,width=17,side="left",pad="0")
-#geo$user_id <- toString(geo$user_id)
 ids       <- paste0("Created at: ", geo$created_at, "\n", "user location: ", geo$usr_location,
                    " Place fullname: ", geo$place_full_name, "\n", "Text: ", geo$text)
 
