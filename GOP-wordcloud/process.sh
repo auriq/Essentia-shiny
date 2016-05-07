@@ -23,6 +23,10 @@ ess create database sanders --ports 10014
 ess create vector wordcount s,pkey:word i,+add:count
 ess server commit
 
+ess create database random --ports 10016
+ess create vector wordcount s,pkey:word i,+add:count
+ess server commit
+
 }
 
 ###word count function
@@ -31,27 +35,34 @@ wordcount () {
 ess stream gop '*' '*' | aq_pp -f,+1,eok,qui - -d s@3:text -filt 'PatCmp(text,"*trump*","ncas")' | \
            tr -s '[[:space:][:blank:][:punct:]]' '\n' | \
            aq_pp -d s:word -eval i:count 1 \
-           -if -filt 'SLeng(word) > 3' -imp trump:wordcount -endif
+           -if -filt 'SLeng(word) > 2' -imp trump:wordcount -endif
 ess stream gop '*' '*' | aq_pp -f,+1,eok,qui - -d s@3:text -filt 'PatCmp(text,"*hillary*","ncas")' | \
            tr -s '[[:space:][:blank:][:punct:]]' '\n' | \
            aq_pp -d s:word -eval i:count 1 \
-           -if -filt 'SLeng(word) > 3' -imp hillary:wordcount -endif
+           -if -filt 'SLeng(word) > 2' -imp hillary:wordcount -endif
 ess stream gop '*' '*' | aq_pp -f,+1,eok,qui - -d s@3:text -filt 'PatCmp(text,"*sanders*","ncas")' | \
            tr -s '[[:space:][:blank:][:punct:]]' '\n' | \
            aq_pp -d s:word -eval i:count 1 \
-           -if -filt 'SLeng(word) > 3' -imp sanders:wordcount -endif
+           -if -filt 'SLeng(word) > 2' -imp sanders:wordcount -endif
+ess stream random '*' '*' | aq_pp -f,+1,eok,qui - -d s@3:text | \
+           tr -s '[[:space:][:blank:][:punct:]]' '\n' | \
+           aq_pp -d s:word -eval i:count 1 \
+           -if -filt 'SLeng(word) > 2' -imp random:wordcount -endif
+
 aq_udb -exp trump:wordcount -sort count -dec -top 3000 > trumpTop.csv
 aq_udb -exp hillary:wordcount -sort count -dec -top 3000 > hillaryTop.csv
 aq_udb -exp sanders:wordcount -sort count -dec -top 3000 > sandersTop.csv
+aq_udb -exp random:wordcount -sort count -dec -top 3000 > randomTop.csv
 
 }           
 
 #category_create gop 'tweets/candidate*'     
+#database_create
 start_T=`date +%s`
-database_create
 ess udbd restart 10012
 ess udbd restart 10013
 ess udbd restart 10014
+ess udbd restart 10016
 wordcount
 end_T=`date +%s`
 echo "Time spend is `expr $end_T - $start_T` second"
