@@ -32,27 +32,27 @@ ess server commit
 ###word count function
 wordcount () {
 
-ess stream gop '*' '*' | aq_pp -f,+1,eok,qui - -d s@3:text -filt 'PatCmp(text,"*trump*","ncas")' | \
-           tr -s '[[:space:][:blank:][:punct:]]' '\n' | \
-           aq_pp -d s:word -eval i:count 1 \
+ess stream gop '*' '*' | aq_pp -f,+1,eok,qui - -d s,lo@3:text -filt 'PatCmp(text,"*trump*")' | \
+           sed 's/ /\n/g' | sed 's/^[[:punct:]]*//;s/[[:punct:]]*$//g' | \
+           aq_pp -f,eok,sep='\n' - -d s:word -eval i:count 1 \
            -if -filt 'SLeng(word) > 2' -imp trump:wordcount -endif
-ess stream gop '*' '*' | aq_pp -f,+1,eok,qui - -d s@3:text -filt 'PatCmp(text,"*hillary*","ncas")' | \
-           tr -s '[[:space:][:blank:][:punct:]]' '\n' | \
-           aq_pp -d s:word -eval i:count 1 \
+ess stream gop '*' '*' | aq_pp -f,+1,eok,qui - -d s,lo@3:text -filt 'PatCmp(text,"*hillary*")' | \
+           sed 's/ /\n/g' | sed 's/^[[:punct:]]*//;s/[[:punct:]]*$//g' | \
+           aq_pp -f,eok,sep='\n' - -d s:word -eval i:count 1 \
            -if -filt 'SLeng(word) > 2' -imp hillary:wordcount -endif
-ess stream gop '*' '*' | aq_pp -f,+1,eok,qui - -d s@3:text -filt 'PatCmp(text,"*sanders*","ncas")' | \
-           tr -s '[[:space:][:blank:][:punct:]]' '\n' | \
-           aq_pp -d s:word -eval i:count 1 \
+ess stream gop '*' '*' | aq_pp -f,+1,eok,qui - -d s,lo@3:text -filt 'PatCmp(text,"*sanders*")' | \
+           sed 's/ /\n/g' | sed 's/^[[:punct:]]*//;s/[[:punct:]]*$//g' | \
+           aq_pp -f,eok,sep='\n' - -d s:word -eval i:count 1 \
            -if -filt 'SLeng(word) > 2' -imp sanders:wordcount -endif
-ess stream random '*' '*' | aq_pp -f,+1,eok,qui - -d s@3:text | \
-           tr -s '[[:space:][:blank:][:punct:]]' '\n' | \
-           aq_pp -d s:word -eval i:count 1 \
+ess stream random '*' '*' | aq_pp -f,+1,eok,qui - -d s,lo@3:text | \
+           sed 's/ /\n/g' | sed 's/^[[:punct:]]*//;s/[[:punct:]]*$//g' | \
+           aq_pp -f,eok,sep='\n' - -d s:word -eval i:count 1 \
            -if -filt 'SLeng(word) > 2' -imp random:wordcount -endif
 
-aq_udb -exp trump:wordcount -sort count -dec -top 3000 > trumpTop.csv
-aq_udb -exp hillary:wordcount -sort count -dec -top 3000 > hillaryTop.csv
-aq_udb -exp sanders:wordcount -sort count -dec -top 3000 > sandersTop.csv
-aq_udb -exp random:wordcount -sort count -dec -top 3000 > randomTop.csv
+aq_udb -exp trump:wordcount -sort count -dec -top 3000 > trumpTopN.csv
+aq_udb -exp hillary:wordcount -sort count -dec -top 3000 > hillaryTopN.csv
+aq_udb -exp sanders:wordcount -sort count -dec -top 3000 > sandersTopN.csv
+aq_udb -exp random:wordcount -sort count -dec -top 3000 > randomTopN.csv
 
 }           
 

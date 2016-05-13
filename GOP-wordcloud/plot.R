@@ -12,10 +12,10 @@ library(leaflet)
 library(wordcloud)
 library(RColorBrewer)
 ##read info for counts############################
-trump   <- read.csv("trumpTop.csv")
-hillary <- read.csv("hillaryTop.csv")
-sanders <- read.csv("sandersTop.csv")
-random  <- read.csv("randomTop.csv")
+trump   <- read.csv("trumpTopN.csv")
+hillary <- read.csv("hillaryTopN.csv")
+sanders <- read.csv("sandersTopN.csv")
+random  <- read.csv("randomTopN.csv")
 stop_words <- read.csv("stopword.csv")
 row.names(trump) <- trump$word
 row.names(hillary) <- hillary$word
